@@ -1,7 +1,17 @@
 import React from "react";
 import { Link } from "gatsby";
+import { useIdentityContext } from "react-netlify-identity";
 
-const Profile = () => {
+const Profile = ({ toggleModal }) => {
+  const identity = useIdentityContext();
+
+  const isLoggedIn = identity && identity.isLoggedIn;
+  const name =
+    identity &&
+    identity.user &&
+    identity.user.user_metadata &&
+    identity.user.user_metadata.full_name;
+
   return (
     <div className="dashboard-header">
       <nav>
@@ -13,7 +23,11 @@ const Profile = () => {
         </Link>
       </nav>
 
-      <span> TODO Login status </span>
+      {isLoggedIn ? (
+        <button onClick={toggleModal}>`Hey, ${name}`</button>
+      ) : (
+        <button onClick={toggleModal}>Log in</button>
+      )}
     </div>
   );
 };
